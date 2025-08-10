@@ -1,0 +1,12 @@
+[build]
+  functions = "functions"
+
+[dev]
+  functions = "functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = []
+
+[context.production]
+  environment = { NODE_VERSION = "18" }
