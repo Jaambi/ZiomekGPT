@@ -1,62 +1,47 @@
-const log = document.getElementById('log');
-const q = document.getElementById('q');
-const send = document.getElementById('send');
-const clearBtn = document.getElementById('clear');
-const modeSel = document.getElementById('mode');
-const temp = document.getElementById('temp');
-const tempVal = document.getElementById('tempVal');
-const maxTok = document.getElementById('max');
-
-// Restore prefs
-(function(){
-  const saved = JSON.parse(localStorage.getItem('ziomek:prefs')||'{}');
-  if(saved.mode) modeSel.value = saved.mode;
-  if(saved.temp!=null) { temp.value = saved.temp; tempVal.textContent = saved.temp; }
-  if(saved.max) maxTok.value = saved.max;
-})();
-
-function write(line, cls='sys'){
-  const div=document.createElement('div');
-  div.className=cls;
-  div.textContent=line;
-  log.appendChild(div);
-  log.scrollTop=log.scrollHeight;
-}
-temp.addEventListener('input', ()=> tempVal.textContent = temp.value);
-clearBtn.onclick = ()=>{ log.innerHTML=''; write('Czyszczenie historii.','sys'); };
-
-async function ask(){
-  const msg = q.value.trim();
-  if(!msg) return;
-  const payload = {
-    message: msg,
-    mode: modeSel.value,
-    temperature: Number(temp.value),
-    max_tokens: Number(maxTok.value)
-  };
-  // Save prefs
-  localStorage.setItem('ziomek:prefs', JSON.stringify({mode:payload.mode,temp:payload.temperature,max:payload.max_tokens}));
-  write('Ty: ' + msg, 'you');
-  q.value='';
+async function loadSystemPrompt(){
+  const el = document.getElementById('systemPrompt');
   try{
-    const res = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    if(!res.ok){
-      const text = await res.text();
-      write('Błąd API ' + res.status + ': ' + text, 'sys');
-      return;
-    }
-    const data = await res.json();
-    write('Ziomek: ' + (data.reply || '[brak odpowiedzi]'), 'ai');
+    const txt = await fetch('/system_prompt.txt').then(r=>r.text());
+    el.textContent = txt;
   }catch(e){
-    write('Błąd sieci: ' + e.message, 'sys');
+    el.textContent = 'Nie udało się wczytać system_prompt.txt';
   }
 }
+loadSystemPrompt();
 
-send.onclick = ask;
-q.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey) ask(); });
+const messagesEl = document.getElementById('messages');
+const form = document.getElementById('form');
+const input = document.getElementById('input');
 
-write('Gotowe. Wpisz wiadomość i kliknij Wyślij.','sys');
+function addMsg(role, text){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+  div.textContent = text;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const text = input.value.trim();
+  if(!text) return;
+  addMsg('user', text);
+  input.value='';
+  form.querySelector('button').disabled = true;
+
+  try{
+    const payload = { messages: [{role:'user', content:text}] };
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Błąd');
+    addMsg('assistant', data.reply || '(brak odpowiedzi)');
+  }catch(err){
+    addMsg('assistant', 'Błąd: ' + err.message);
+  }finally{
+    form.querySelector('button').disabled = false;
+  }
+});

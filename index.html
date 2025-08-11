@@ -1,73 +1,88 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ziomek GPT – Full Power</title>
-  <style>
-    :root{--b:#0a0a0a;--c:#111;--t:#eee;--a:#3aa8ff}
-    *{box-sizing:border-box}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;background:#0b0b0c;color:#e6e6e6;margin:0;min-height:100vh}
-    .wrap{max-width:980px;margin:0 auto;padding:22px}
-    h1{font-size:24px;margin:6px 0 14px}
-    .grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
-    #log{border:1px solid #2a2a2a;border-radius:12px;padding:12px;height:520px;overflow:auto;white-space:pre-wrap;background:#0f0f12}
-    .row{display:flex;gap:8px;margin-top:12px}
-    textarea,input,select,button{font:inherit;border-radius:10px;border:1px solid #2a2a2a;background:#111;color:#eee}
-    textarea{flex:1;padding:10px;min-height:64px}
-    input{flex:1;padding:10px}
-    select{padding:10px;width:100%}
-    button{padding:10px 14px;border:0;background:#2a2a2a;cursor:pointer}
-    button.primary{background:#2563eb;color:#fff}
-    .card{border:1px solid #2a2a2a;border-radius:12px;padding:12px;background:#0f0f12}
-    .label{font-size:12px;color:#aaa;margin-bottom:6px}
-    .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .sys{color:#9aa}
-    .you{color:#34d399}
-    .ai{color:#60a5fa}
-    .row-right{display:flex;gap:8px;justify-content:flex-end}
-    .pill{font-size:12px;padding:4px 8px;border:1px solid #2a2a2a;border-radius:999px}
-    .muted{color:#9aa}
-    .small{font-size:12px}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ziomek GPT – AUTO-UPGRADE AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d0d0d;
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #00ff99;
+        }
+        #chat {
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #1a1a1a;
+            overflow-y: auto;
+            height: 60vh;
+        }
+        #inputArea {
+            display: flex;
+            width: 90%;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #00ff99;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Ziomek GPT – Full Power</h1>
-    <div class="grid">
-      <div class="card">
-        <div id="log" aria-live="polite"></div>
-        <div class="row">
-          <textarea id="q" placeholder="Zadaj pytanie..."></textarea>
-        </div>
-        <div class="row row-right">
-          <button id="clear">Wyczyść</button>
-          <button id="send" class="primary">Wyślij</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="label">Tryb</div>
-        <select id="mode">
-          <option value="dev-pro">/dev-pro – kod, testy, checklisty</option>
-          <option value="hack">/hack – diagnostyka, analiza logów</option>
-          <option value="fin">/fin – finanse, kalkulacje</option>
-          <option value="elite">/elite – decyzyjność, ryzyka</option>
-          <option value="psycholog">/psycholog – pytania sokratejskie</option>
-          <option value="motywacja">/motywacja – zadania i cele</option>
-          <option value="vision">/vision – produkt, strategia</option>
-          <option value="default">/default – zbalansowany</option>
-        </select>
-        <div class="label" style="margin-top:10px">Temperatura <span id="tempVal" class="pill muted">0.2</span></div>
-        <input id="temp" type="range" min="0" max="1" step="0.1" value="0.2"/>
-        <div class="label" style="margin-top:10px">Max tokens</div>
-        <input id="max" type="number" value="512" min="64" max="4096"/>
-        <div class="label" style="margin-top:10px">Informacje</div>
-        <div class="small muted">
-          Klucz API jest po stronie serwera. UI zapisuje preferencje w localStorage.
-        </div>
-      </div>
+    <h1>Ziomek GPT</h1>
+    <div id="chat"></div>
+    <div id="inputArea">
+        <input type="text" id="userInput" placeholder="Napisz coś..." />
+        <button onclick="sendMessage()">Wyślij</button>
     </div>
-  </div>
-  <script src="/public/app.js"></script>
+
+    <script>
+        async function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const message = inputField.value.trim();
+            if (!message) return;
+            
+            appendMessage('Ty', message);
+            inputField.value = '';
+
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+            appendMessage('Ziomek', data.reply || '[brak odpowiedzi]');
+        }
+
+        function appendMessage(sender, text) {
+            const chat = document.getElementById('chat');
+            const msgDiv = document.createElement('div');
+            msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
 </body>
 </html>

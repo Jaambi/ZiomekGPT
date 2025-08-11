@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ziomek GPT – AUTO-UPGRADE</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Ziomek GPT</h1>
+    <p>AUTO-UPGRADE AI 100% POWER</p>
+  </header>
+
+  <main>
+    <section id="promptBox">
+      <h2>System Prompt</h2>
+      <pre id="systemPrompt">Ładowanie…</pre>
+    </section>
+
+    <section id="chat">
+      <div id="messages"></div>
+      <form id="form">
+        <input id="input" type="text" placeholder="Napisz wiadomość…" autocomplete="off" required>
+        <button type="submit">Wyślij</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <small>Model: <span id="modelName">gpt-4o-mini</span></small>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

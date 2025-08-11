@@ -1,0 +1,16 @@
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Calibri,Arial,sans-serif;margin:0;background:#0b0f14;color:#e6edf3}
+header{padding:20px;border-bottom:1px solid #1f2630;background:#0f141b}
+h1{margin:0;font-size:20px}header p{margin:4px 0 0;color:#93a1b1}
+main{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px;min-height:80vh}
+#promptBox{background:#0f141b;border:1px solid #1f2630;border-radius:12px;padding:12px}
+#systemPrompt{white-space:pre-wrap;background:#0b0f14;border:1px dashed #2b3645;border-radius:8px;padding:12px;max-height:40vh;overflow:auto}
+#chat{display:flex;flex-direction:column;background:#0f141b;border:1px solid #1f2630;border-radius:12px;padding:12px}
+#messages{flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px;padding:8px}
+.msg{padding:10px 12px;border-radius:10px;max-width:85%}
+.user{align-self:flex-end;background:#1a73e8;color:white}
+.bot{align-self:flex-start;background:#18202b;border:1px solid #243042}
+#form{display:flex;gap:8px;margin-top:12px}
+#input{flex:1;padding:10px;border-radius:8px;border:1px solid #263141;background:#0b0f14;color:#e6edf3}
+button{padding:10px 16px;border-radius:8px;border:1px solid #263141;background:#101825;color:#e6edf3;cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+@media (max-width: 900px){main{grid-template-columns:1fr}}
