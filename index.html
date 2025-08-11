@@ -1,1 +1,48 @@
-<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ziomek GPT – Komandos AI ULTRA</title><link rel="manifest" href="/manifest.json"><link rel="stylesheet" href="/style.css"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.openai.com;"></head><body><header><h1>Ziomek GPT – Komandos AI ULTRA</h1></header><main><section class="toolbar"><select id="mode"><option value="/elite">/elite</option><option value="/hack-pro">/hack-pro</option><option value="/fin-pro">/fin-pro</option><option value="/osint">/osint</option><option value="/dev-pro">/dev-pro</option><option value="/media">/media</option><option value="/psycholog">/psycholog</option><option value="/vision">/vision</option><option value="/motywacja">/motywacja</option></select><label class="chk"><input id="ttsToggle" type="checkbox"> TTS</label><button id="micBtn" title="Mów / Stop">🎤</button><button id="imgBtn" title="Generuj obraz">🎨</button><button id="clearBtn" title="Wyczyść czat">🧹</button></section><section id="chat" aria-live="polite"></section><section id="input-area"><textarea id="userInput" rows="2" placeholder="Wpisz wiadomość... Np. /dev-pro: zrób skrypt..."></textarea><button id="sendBtn">Wyślij</button></section></main><script src="/prompts.js"></script><script src="/app.js"></script><script>if('serviceWorker'in navigator){addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));}</script></body></html>
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ziomek GPT – Komandos AI ULTRA</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/style.css" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob: data:;
+                 style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';
+                 connect-src 'self' https://api.openai.com;">
+</head>
+<body>
+  <header><h1>Ziomek GPT – Komandos AI ULTRA</h1></header>
+  <main>
+    <section class="toolbar">
+      <select id="mode">
+        <option value="/elite">/elite</option>
+        <option value="/hack-pro">/hack-pro</option>
+        <option value="/fin-pro">/fin-pro</option>
+        <option value="/osint">/osint</option>
+        <option value="/dev-pro">/dev-pro</option>
+        <option value="/media">/media</option>
+        <option value="/psycholog">/psycholog</option>
+        <option value="/vision">/vision</option>
+        <option value="/motywacja">/motywacja</option>
+      </select>
+      <label class="chk"><input id="ttsToggle" type="checkbox" /> TTS</label>
+      <button id="micBtn" title="Mów/Stop">🎤</button>
+      <button id="imgBtn" title="Generuj obraz">🎨</button>
+      <button id="clearBtn" title="Wyczyść czat">🧹</button>
+    </section>
+    <section id="chat" aria-live="polite"></section>
+    <section id="input-area">
+      <textarea id="userInput" rows="2" placeholder="Napisz… np. /dev-pro: zrób skrypt…"></textarea>
+      <button id="sendBtn">Wyślij</button>
+    </section>
+  </main>
+  <script src="/prompts.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+    }
+  </script>
+</body>
+</html>

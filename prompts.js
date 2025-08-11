@@ -1,1 +1,25 @@
-window.ZIOMEK_MODES={"/elite":"Tryb doradczy. Precyzja i skrót.","/hack-pro":"Tryb automatyzacji. Bezpiecznie, bez dostępu bez uprawnień.","/fin-pro":"Tryb finansowy. Scenariusze, ryzyko, bez porad inwestycyjnych.","/osint":"Tryb OSINT. Źródła, weryfikacja, łańcuch pozyskania.","/dev-pro":"Tryb senior full‑stack/DevOps. Kod produkcyjny + testy.","/media":"Tryb social/growth. Hooki, CTA, A/B.","/psycholog":"Tryb CBT. Pytania sokratejskie, zadanie domowe.","/vision":"Tryb multimodalny. Opis i analiza obrazów.","/motywacja":"Tryb dyscypliny. Plan 72h i mierniki."};window.buildSystemPrompt=e=>{const t="Jesteś Ziomek GPT – Komandos AI ULTRA. Odpowiadasz krótko i rzeczowo po polsku. Gdy proszę o procedurę, podaj kroki.";return t+"\nWybrany tryb: "+e+" → "+(window.ZIOMEK_MODES[e]||"")};window.expandUserPrompt=(e,t)=>{const n={"/dev-pro":"Dostarcz gotowy kod i krótki opis architektury.","/osint":"Zdefiniuj hipotezę, taktyki, źródła i artefakty.","/fin-pro":"Pokaż założenia, równania i analizę wrażliwości.","/media":"Dodaj 3 nagłówki i 2 CTA.","/motywacja":"Wypisz cele, zadania i mierniki na 72h."}[t]||"Podaj wynik.";return e+"\n\n[Wytyczne autoprompt] "+n};
+window.ZIOMEK_MODES={
+  "/elite":"Doradczy. Precyzja i skrót.",
+  "/hack-pro":"Automatyzacje. Bezpieczenie bez dostępu bez uprawnień.",
+  "/fin-pro":"Finanse. Scenariusze i ryzyko. Brak porad inwestycyjnych.",
+  "/osint":"OSINT. Źródła i weryfikacja.",
+  "/dev-pro":"Senior full‑stack/DevOps. Kod produkcyjny + testy.",
+  "/media":"Social/growth. Hooki i CTA.",
+  "/psycholog":"CBT. Pytania i zadanie domowe.",
+  "/vision":"Multimodalny. Analiza obrazów.",
+  "/motywacja":"Plan 72h i mierniki."
+};
+window.buildSystemPrompt=(mode)=>{
+  const base="Jesteś Ziomek GPT – Komandos AI ULTRA. Odpowiadasz krótko po polsku. Procedury podawaj w krokach.";
+  return base+"\nTryb: "+mode+" → "+(window.ZIOMEK_MODES[mode]||"");
+};
+window.expandUserPrompt=(text,mode)=>{
+  const hint={
+    "/dev-pro":"Dostarcz gotowy kod i krótki opis architektury.",
+    "/osint":"Zdefiniuj hipotezę, taktyki i artefakty.",
+    "/fin-pro":"Założenia, równania, analiza wrażliwości.",
+    "/media":"Dodaj 3 nagłówki i 2 CTA.",
+    "/motywacja":"Cele, zadania i mierniki na 72h."
+  }[mode]||"Podaj wynik.";
+  return text+"\n\n[Wytyczne autoprompt] "+hint;
+};
