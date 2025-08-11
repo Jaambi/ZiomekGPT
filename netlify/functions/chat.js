@@ -1,18 +1,23 @@
 
 /**
- * Netlify Function: chat
+ * Netlify Function: chat (Groq)
  * POST /.netlify/functions/chat
  * Body: { messages: [{role:"user"|"assistant"|"system", content:string}] }
- * Env: OPENAI_API_KEY, OPENAI_MODEL
+ * Env: GROQ_API_KEY, GROQ_MODEL
+ * API: https://api.groq.com/openai/v1/chat/completions (OpenAI-compatible)
  */
 import fs from "fs";
 import path from "path";
 
-const API_URL = "https://api.openai.com/v1/chat/completions";
+const API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
+  if (!process.env.GROQ_API_KEY) {
+    return { statusCode: 500, body: JSON.stringify({ error: "Missing GROQ_API_KEY env" }) };
   }
 
   try {
@@ -34,7 +39,7 @@ export async function handler(event) {
     const sys = { role: "system", content: sp || "You are a helpful assistant." };
 
     const body = {
-      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+      model: process.env.GROQ_MODEL || "llama-3.1-70b-versatile",
       messages: [sys, ...messages].slice(-40),
       temperature: 0.4
     };
@@ -43,17 +48,18 @@ export async function handler(event) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify(body)
     });
 
+    const text = await resp.text();
     if (!resp.ok) {
-      const errText = await resp.text();
-      return { statusCode: resp.status, body: JSON.stringify({ error: errText }) };
+      return { statusCode: resp.status, body: JSON.stringify({ error: text }) };
     }
 
-    const data = await resp.json();
+    let data;
+    try { data = JSON.parse(text); } catch { data = { choices:[{message:{content:text}}] }; }
     const reply = data.choices?.[0]?.message?.content ?? "";
     return {
       statusCode: 200,
