@@ -1,27 +1,10 @@
 [build]
-  publish = "."
-  command = ""
+publish = "."
 
 [functions]
-  directory = "."
-  node_bundler = "esbuild"
-  included_files = ["*.js"]
+directory = "functions"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/ziomek/:splat"
-  status = 200
-  force = true
-
-[[headers]]
-  for = "/sw.js"
-  [headers.values]
-    Cache-Control = "no-cache"
-    Service-Worker-Allowed = "/"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
+from = "/api/*"
+to = "/.netlify/functions/ziomek/:splat"
+status = 200

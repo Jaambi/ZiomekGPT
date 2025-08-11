@@ -1,73 +1,26 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0b0b0f">
-  <title>Ziomek GPT-5 Plus – Komandos AI ULTRA</title>
-  <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="/style.css">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Ziomek AI">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.openai.com; img-src 'self' data: blob:; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.openai.com;">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ziomek GPT</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Ziomek GPT-5 Plus – Komandos AI ULTRA</h1>
-    <div class="status">
-      <span id="pwaStatus">offline?</span>
-      <button id="installBtn" hidden>Instaluj PWA</button>
-    </div>
-  </header>
-
-  <main>
-    <section id="chat">
-      <div class="controls">
-        <select id="mode">
-          <option value="/elite">/elite</option>
-          <option value="/hack-pro">/hack-pro</option>
-          <option value="/fin-pro">/fin-pro</option>
-          <option value="/osint">/osint</option>
-          <option value="/dev-pro">/dev-pro</option>
-          <option value="/media">/media</option>
-          <option value="/psycholog">/psycholog</option>
-          <option value="/vision">/vision</option>
-          <option value="/motywacja">/motywacja</option>
-        </select>
-        <label class="toggle">
-          <input type="checkbox" id="ttsToggle"> TTS
-        </label>
-        <button id="micBtn" title="Mów">🎙️</button>
-        <label class="file">
-          <input type="file" id="imageFile" accept="image/*" hidden>
-          <span>📷</span>
-        </label>
-        <button id="clearBtn" title="Wyczyść">🧹</button>
-      </div>
-      <div id="messages" aria-live="polite"></div>
-      <form id="promptForm">
-        <textarea id="prompt" rows="3" placeholder="Napisz wiadomość. Użyj trybów, np. /dev-pro: wygeneruj skrypt..."></textarea>
-        <div class="actions">
-          <button id="sendBtn" type="submit">Wyślij</button>
-          <button id="imgBtn" type="button">Generuj obraz</button>
-        </div>
-      </form>
-    </section>
-  </main>
-
-  <footer>
-    <small>Backend działa jako Netlify Function <code>/api/*</code>. Klucz OpenAI tylko po stronie serwera.</small>
-  </footer>
-
-  <script src="/prompts.js"></script>
-  <script src="/app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
-      });
-    }
-  </script>
+<header>
+    <h1>Ziomek GPT – Komandos AI ULTRA</h1>
+</header>
+<main id="chat-container">
+    <div id="chat"></div>
+</main>
+<div id="input-area">
+    <textarea id="userInput" rows="1" placeholder="Wpisz wiadomość..."></textarea>
+    <button id="sendBtn">Wyślij</button>
+    <button id="imgBtn" title="Generuj obraz">🎨</button>
+    <button id="micBtn" title="Mów / Stop">🎤</button>
+</div>
+<script src="prompts.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
