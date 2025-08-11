@@ -32,10 +32,14 @@ async function sendChat(){
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ system, text, mode })
     });
-    if(!res.ok){ throw new Error(await res.text()); }
-    const data=await res.json();
-    addMsg('bot',data.text||'[brak odpowiedzi]');
-    if(ttsToggle && ttsToggle.checked){ speak(data.text||''); }
+    const ok=res.ok;
+    let payload=null;
+    try{ payload=await res.json(); }catch{ payload=null; }
+    const out=(payload&&payload.text)||'';
+    if(!ok){ addMsg('bot','Błąd API'); console.debug('chat error payload:', payload); return; }
+    if(!out){ addMsg('bot','[brak odpowiedzi]'); console.debug('chat empty payload:', payload); return; }
+    addMsg('bot', out);
+    if(ttsToggle && ttsToggle.checked){ speak(out); }
   }catch(err){ addMsg('bot','Błąd: '+err.message); }
 }
 
@@ -47,22 +51,16 @@ async function genImage(){
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ prompt: raw, size:'1024x1024' })
     });
-    if(!res.ok){ throw new Error(await res.text()); }
-    const data=await res.json();
-    if(data.url) addImg(data.url); else addMsg('bot','Błąd generacji obrazu');
+    if(!res.ok){ addMsg('bot','Błąd API obrazów'); return; }
+    const data=await res.json(); if(data.url) addImg(data.url); else addMsg('bot','Błąd generacji obrazu');
   }catch(err){ addMsg('bot','Błąd: '+err.message); }
 }
 
 async function speak(text){
   try{
-    if('speechSynthesis' in window){
-      const u=new SpeechSynthesisUtterance(text); u.lang='pl-PL'; speechSynthesis.speak(u); return;
-    }
+    if('speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(text); u.lang='pl-PL'; speechSynthesis.speak(u); return; }
     const res=await fetch('/api/tts',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ text }) });
-    if(!res.ok) return;
-    const buf=await res.arrayBuffer();
-    const url=URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'}));
-    new Audio(url).play();
+    if(!res.ok) return; const buf=await res.arrayBuffer(); const url=URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'})); new Audio(url).play();
   }catch(_){}
 }
 
