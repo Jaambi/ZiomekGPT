@@ -1,10 +1,10 @@
 [build]
-publish = "."
-
+  publish = "."
 [functions]
-directory = "functions"
+  directory = "functions"
 
 [[redirects]]
-from = "/api/*"
-to = "/.netlify/functions/ziomek/:splat"
-status = 200
+  from = "/api/*"
+  to   = "/.netlify/functions/ziomek/:splat"
+  status = 200
+  force  = true
