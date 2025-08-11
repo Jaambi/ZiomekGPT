@@ -1,5 +1,5 @@
 /* eslint-disable */
-const fetch = global.fetch || require('node-fetch'); // Netlify Node 18 ma global fetch, fallback dla lokalnego testu
+const fetch = global.fetch || require('node-fetch');
 
 function corsHeaders(){
   return {
@@ -29,21 +29,20 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers: corsHeaders(), body: 'message required' };
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if(!apiKey){
-    return { statusCode: 500, headers: corsHeaders(), body: 'Missing OPENAI_API_KEY' };
+  const groqKey = process.env.GROQ_API_KEY;
+  if(!groqKey){
+    return { statusCode: 500, headers: corsHeaders(), body: 'Missing GROQ_API_KEY' };
   }
 
   try{
-    // Minimalne wywołanie Chat Completions bez zależności
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer ' + apiKey,
+        'Authorization': 'Bearer ' + groqKey,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'llama3-70b-8192',
         messages: [
           { role: 'system', content: 'Jesteś Ziomek GPT. Odpowiadasz krótko, konkretnie, po polsku.' },
           { role: 'user', content: userMsg }

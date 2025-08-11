@@ -1,5 +1,5 @@
 {
-  "name": "ziomekgpt-netlify-fix",
+  "name": "ziomekgpt-netlify-groq",
   "private": true,
   "scripts": {
     "dev": "netlify dev",

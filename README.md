@@ -1,17 +1,11 @@
-# ZiomekGPT Netlify Fix
+# ZiomekGPT Netlify – Groq API (darmowe)
 
-Minimalny, działający czat na Netlify Functions.
+## Jak uruchomić
+1. Wgraj pliki do repo jako root (bez podfolderów).
+2. Podłącz repo w Netlify: Build command: brak, Publish: `.`, Functions: `netlify/functions`.
+3. W Netlify dodaj zmienną środowiskową:
+   - `GROQ_API_KEY` = Twój klucz z https://console.groq.com/keys
+4. Deploy.
+5. Wejdź na stronę i testuj czat.
 
-## Szybki start
-
-1) Wgraj pliki do repo jako **root** (bez podfolderów).
-2) Podłącz repo w Netlify. Build command: brak. Publish: `.`. Functions: `netlify/functions`.
-3) Ustaw zmienną środowiskową:
-   - `OPENAI_API_KEY` = Twój klucz
-4) Deploy. Test na prod:
-   - Wejdź na stronę, wyślij wiadomość.
-   - Albo: `curl -X POST https://<site>/.netlify/functions/chat -H "Content-Type: application/json" -d '{"message":"Cześć"}'`
-
-## Lokalnie
-- `npm i -g netlify-cli`
-- `netlify dev`
+Model: `llama3-70b-8192` – darmowy, działa przez Groq API.
