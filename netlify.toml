@@ -1,12 +1,27 @@
 [build]
-  functions = "functions"
-
-[dev]
-  functions = "functions"
+  publish = "."
+  command = ""
 
 [functions]
+  directory = "."
   node_bundler = "esbuild"
-  included_files = []
+  included_files = ["*.js"]
 
-[context.production]
-  environment = { NODE_VERSION = "18" }
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/ziomek"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"

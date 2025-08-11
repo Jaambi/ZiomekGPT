@@ -1,18 +1,23 @@
-# Ziomek GPT – Full Power (OpenAI, Netlify + GitHub)
+# Ziomek GPT-5 Plus – Komandos AI ULTRA
 
-## Najszybsze wdrożenie (iPhone-friendly)
-1) GitHub → utwórz repo → Upload całego folderu.
-2) Netlify → Add new site → Import from Git → wskaż repo.
-3) Site settings → Environment variables:
-   - `OPENAI_API_KEY` = Twój klucz
-   - (opcjonalnie) `OPENAI_MODEL` = `gpt-4o`
-   - (opcjonalnie) `CORS_ALLOW_ORIGIN` = `https://twoja-domena.netlify.app`
-4) Deploy włączy się automatycznie.
+Single‑page PWA z czatem, trybami eksperckimi, DALL·E, TTS, STT. Backend to funkcja Netlify `ziomek.js` w katalogu głównym. Klucz OpenAI tylko w zmiennej środowiskowej `OPENAI_API_KEY` na Netlify.
 
-## Endpointy
-- Front: `/`
-- API: `/.netlify/functions/chat`
-- Health: `/.netlify/functions/health`
+## Szybki start
+1. Ustaw w Netlify zmienną środowiskową `OPENAI_API_KEY`.
+2. Wgraj ZIP do nowej strony w Netlify lub użyj Netlify CLI:  
+   ```bash
+   npm i -g netlify-cli
+   ./deploy.sh <twoja-nazwa-strony>
+   ```
+3. Wejdź na `/` i testuj tryby: `/elite, /hack-pro, /fin-pro, /osint, /dev-pro, /media, /psycholog, /vision, /motywacja`.
 
-## UI
-- Szybkie pokrętła: `temperature`, `max_tokens` w pasku formularza.
+## Architektura
+- **Frontend**: `index.html`, `style.css`, `app.js`, `prompts.js`, PWA `manifest.json`, `sw.js`.
+- **Backend**: Netlify Function `ziomek.js` z trasami `/api/chat`, `/api/image`, `/api/tts`, `/api/transcribe`.
+- **Bezpieczeństwo**: brak klucza w kliencie. CORS + CSP. Offline cache dla UI.
+
+## Testy lokalne
+Możesz użyć `netlify dev` aby uruchomić funkcję i serwować PWA lokalnie.
+
+## Uwaga o kluczach
+Nie umieszczaj klucza w kodzie klienckim. Korzystaj z `OPENAI_API_KEY` po stronie serwera.
