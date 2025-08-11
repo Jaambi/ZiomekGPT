@@ -3,26 +3,70 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ziomek GPT – Groq API</title>
+  <title>Ziomek GPT – Full Power</title>
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;max-width:840px;margin:32px auto;padding:0 16px}
-    h1{font-size:22px}
-    #log{border:1px solid #ddd;border-radius:12px;padding:12px;height:360px;overflow:auto;white-space:pre-wrap}
+    :root{--b:#0a0a0a;--c:#111;--t:#eee;--a:#3aa8ff}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;background:#0b0b0c;color:#e6e6e6;margin:0;min-height:100vh}
+    .wrap{max-width:980px;margin:0 auto;padding:22px}
+    h1{font-size:24px;margin:6px 0 14px}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
+    #log{border:1px solid #2a2a2a;border-radius:12px;padding:12px;height:520px;overflow:auto;white-space:pre-wrap;background:#0f0f12}
     .row{display:flex;gap:8px;margin-top:12px}
-    input,button{font:inherit}
-    input{flex:1;padding:10px;border:1px solid #ccc;border-radius:10px}
-    button{padding:10px 14px;border:0;border-radius:10px;cursor:pointer}
-    .sys{color:#666}
-    .you{color:#0b5}
-    .ai{color:#06c}
+    textarea,input,select,button{font:inherit;border-radius:10px;border:1px solid #2a2a2a;background:#111;color:#eee}
+    textarea{flex:1;padding:10px;min-height:64px}
+    input{flex:1;padding:10px}
+    select{padding:10px;width:100%}
+    button{padding:10px 14px;border:0;background:#2a2a2a;cursor:pointer}
+    button.primary{background:#2563eb;color:#fff}
+    .card{border:1px solid #2a2a2a;border-radius:12px;padding:12px;background:#0f0f12}
+    .label{font-size:12px;color:#aaa;margin-bottom:6px}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .sys{color:#9aa}
+    .you{color:#34d399}
+    .ai{color:#60a5fa}
+    .row-right{display:flex;gap:8px;justify-content:flex-end}
+    .pill{font-size:12px;padding:4px 8px;border:1px solid #2a2a2a;border-radius:999px}
+    .muted{color:#9aa}
+    .small{font-size:12px}
   </style>
 </head>
 <body>
-  <h1>Ziomek GPT – Groq API</h1>
-  <div id="log" aria-live="polite"></div>
-  <div class="row">
-    <input id="q" placeholder="Zadaj pytanie..." autocomplete="off"/>
-    <button id="send">Wyślij</button>
+  <div class="wrap">
+    <h1>Ziomek GPT – Full Power</h1>
+    <div class="grid">
+      <div class="card">
+        <div id="log" aria-live="polite"></div>
+        <div class="row">
+          <textarea id="q" placeholder="Zadaj pytanie..."></textarea>
+        </div>
+        <div class="row row-right">
+          <button id="clear">Wyczyść</button>
+          <button id="send" class="primary">Wyślij</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label">Tryb</div>
+        <select id="mode">
+          <option value="dev-pro">/dev-pro – kod, testy, checklisty</option>
+          <option value="hack">/hack – diagnostyka, analiza logów</option>
+          <option value="fin">/fin – finanse, kalkulacje</option>
+          <option value="elite">/elite – decyzyjność, ryzyka</option>
+          <option value="psycholog">/psycholog – pytania sokratejskie</option>
+          <option value="motywacja">/motywacja – zadania i cele</option>
+          <option value="vision">/vision – produkt, strategia</option>
+          <option value="default">/default – zbalansowany</option>
+        </select>
+        <div class="label" style="margin-top:10px">Temperatura <span id="tempVal" class="pill muted">0.2</span></div>
+        <input id="temp" type="range" min="0" max="1" step="0.1" value="0.2"/>
+        <div class="label" style="margin-top:10px">Max tokens</div>
+        <input id="max" type="number" value="512" min="64" max="4096"/>
+        <div class="label" style="margin-top:10px">Informacje</div>
+        <div class="small muted">
+          Klucz API jest po stronie serwera. UI zapisuje preferencje w localStorage.
+        </div>
+      </div>
+    </div>
   </div>
   <script src="/public/app.js"></script>
 </body>

@@ -9,6 +9,17 @@ function corsHeaders(){
   };
 }
 
+const MODES = {
+  "default": "Jesteś Ziomek GPT. Krótko, konkretnie, po polsku. Udzielasz odpowiedzi rzeczowo, bez ozdobników.",
+  "dev-pro": "Jesteś Ziomek GPT w trybie DEV-PRO. Działasz jak starszy inżynier. Zawsze: 1) diagnoza, 2) krótka lista kroków, 3) gotowy kod/diff, 4) testy i weryfikacja. Krótko i bez zbędnych słów.",
+  "hack": "Jesteś Ziomek GPT w trybie HACK. Cel: szybka diagnostyka i naprawa. Proponujesz hipotezy, komendy, logi do zebrania, minimalne poprawki i testy.",
+  "fin": "Jesteś Ziomek GPT w trybie FIN. Liczysz koszty, marże, ROI, TCO. Podajesz liczby i wzory. Wynik w tabeli gdy to sensowne.",
+  "elite": "Jesteś Ziomek GPT w trybie ELITE. Decyzje, ryzyka, alternatywy, plan A/B. Minimum słów, maksimum treści.",
+  "psycholog": "Jesteś Ziomek GPT w trybie PSYCHOLOG. Zadajesz precyzyjne pytania sokratejskie, strukturyzujesz myśli, nadajesz zadania.",
+  "motywacja": "Jesteś Ziomek GPT w trybie MOTYWACJA. Tworzysz minimum-viable plan działania na dziś, 3 kroki, miary sukcesu.",
+  "vision": "Jesteś Ziomek GPT w trybie VISION. Definiujesz wizję produktu, USP, roadmapę w punktach, KPI i ryzyka."
+};
+
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers: corsHeaders(), body: '' };
@@ -18,13 +29,14 @@ exports.handler = async (event) => {
   }
 
   let payload;
-  try{
-    payload = JSON.parse(event.body || '{}');
-  }catch{
-    return { statusCode: 400, headers: corsHeaders(), body: 'Invalid JSON' };
-  }
+  try{ payload = JSON.parse(event.body || '{}'); }
+  catch{ return { statusCode: 400, headers: corsHeaders(), body: 'Invalid JSON' }; }
 
-  const userMsg = (payload && payload.message || '').toString().slice(0, 4000);
+  const userMsg = (payload.message || '').toString().slice(0, 6000);
+  const mode = (payload.mode || 'default');
+  const temperature = typeof payload.temperature === 'number' ? payload.temperature : 0.2;
+  const maxTokens = Math.max(64, Math.min(4096, parseInt(payload.max_tokens || 512,10) || 512));
+
   if(!userMsg){
     return { statusCode: 400, headers: corsHeaders(), body: 'message required' };
   }
@@ -33,6 +45,8 @@ exports.handler = async (event) => {
   if(!groqKey){
     return { statusCode: 500, headers: corsHeaders(), body: 'Missing GROQ_API_KEY' };
   }
+
+  const systemPrompt = MODES[mode] || MODES.default;
 
   try{
     const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -44,10 +58,11 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: 'llama3-70b-8192',
         messages: [
-          { role: 'system', content: 'Jesteś Ziomek GPT. Odpowiadasz krótko, konkretnie, po polsku.' },
+          { role: 'system', content: systemPrompt },
           { role: 'user', content: userMsg }
         ],
-        temperature: 0.2
+        temperature,
+        max_tokens: maxTokens
       })
     });
 
@@ -60,7 +75,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', ...corsHeaders() },
-      body: JSON.stringify({ reply })
+      body: JSON.stringify({ reply, mode, temperature, max_tokens: maxTokens })
     };
   }catch(e){
     return { statusCode: 500, headers: corsHeaders(), body: 'Server error: ' + e.message };
