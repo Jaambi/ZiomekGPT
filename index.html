@@ -1,48 +1,29 @@
 <!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ziomek GPT – Komandos AI ULTRA</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="/style.css" />
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob: data:;
-                 style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';
-                 connect-src 'self' https://api.openai.com;">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;max-width:840px;margin:32px auto;padding:0 16px}
+    h1{font-size:22px}
+    #log{border:1px solid #ddd;border-radius:12px;padding:12px;height:360px;overflow:auto;white-space:pre-wrap}
+    .row{display:flex;gap:8px;margin-top:12px}
+    input,button,textarea{font:inherit}
+    input,textarea{flex:1;padding:10px;border:1px solid #ccc;border-radius:10px}
+    button{padding:10px 14px;border:0;border-radius:10px;cursor:pointer}
+    .sys{color:#666}
+    .you{color:#0b5}
+    .ai{color:#06c}
+  </style>
 </head>
 <body>
-  <header><h1>Ziomek GPT – Komandos AI ULTRA</h1></header>
-  <main>
-    <section class="toolbar">
-      <select id="mode">
-        <option value="/elite">/elite</option>
-        <option value="/hack-pro">/hack-pro</option>
-        <option value="/fin-pro">/fin-pro</option>
-        <option value="/osint">/osint</option>
-        <option value="/dev-pro">/dev-pro</option>
-        <option value="/media">/media</option>
-        <option value="/psycholog">/psycholog</option>
-        <option value="/vision">/vision</option>
-        <option value="/motywacja">/motywacja</option>
-      </select>
-      <label class="chk"><input id="ttsToggle" type="checkbox" /> TTS</label>
-      <button id="micBtn" title="Mów/Stop">🎤</button>
-      <button id="imgBtn" title="Generuj obraz">🎨</button>
-      <button id="clearBtn" title="Wyczyść czat">🧹</button>
-    </section>
-    <section id="chat" aria-live="polite"></section>
-    <section id="input-area">
-      <textarea id="userInput" rows="2" placeholder="Napisz… np. /dev-pro: zrób skrypt…"></textarea>
-      <button id="sendBtn">Wyślij</button>
-    </section>
-  </main>
-  <script src="/prompts.js"></script>
-  <script src="/app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
-    }
-  </script>
+  <h1>Ziomek GPT – Komandos AI ULTRA</h1>
+  <div id="log" aria-live="polite"></div>
+  <div class="row">
+    <input id="q" placeholder="Zadaj pytanie..." autocomplete="off"/>
+    <button id="send">Wyślij</button>
+  </div>
+  <script src="/public/app.js"></script>
 </body>
 </html>

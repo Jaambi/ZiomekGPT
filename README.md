@@ -1,6 +1,17 @@
-# ZiomekGPT – Fix2
-- `OPENAI_API_KEY` + `NODE_VERSION=20` w Netlify.
-- Deploy, potem testy w konsoli:
-  1) fetch('/api/').then(r=>r.json())
-  2) fetch('/.netlify/functions/ziomek/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:'test',text:'Powiedz cześć'})}).then(r=>r.json())
-  3) fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:'test',text:'Powiedz cześć'})}).then(r=>r.json())
+# ZiomekGPT Netlify Fix
+
+Minimalny, działający czat na Netlify Functions.
+
+## Szybki start
+
+1) Wgraj pliki do repo jako **root** (bez podfolderów).
+2) Podłącz repo w Netlify. Build command: brak. Publish: `.`. Functions: `netlify/functions`.
+3) Ustaw zmienną środowiskową:
+   - `OPENAI_API_KEY` = Twój klucz
+4) Deploy. Test na prod:
+   - Wejdź na stronę, wyślij wiadomość.
+   - Albo: `curl -X POST https://<site>/.netlify/functions/chat -H "Content-Type: application/json" -d '{"message":"Cześć"}'`
+
+## Lokalnie
+- `npm i -g netlify-cli`
+- `netlify dev`

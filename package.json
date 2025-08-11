@@ -1,0 +1,12 @@
+{
+  "name": "ziomekgpt-netlify-fix",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'no build step'"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}
